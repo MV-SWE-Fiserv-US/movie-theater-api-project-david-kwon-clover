@@ -32,4 +32,20 @@ usersRouter.get("/:id/shows", async (req, res, next) => {
     }
 })
 
+usersRouter.put("/:userId/shows/:showId", async (req, res, next) => {
+    const { userId, showId } = req.params;
+    try {
+        const targetShow = await Show.findByPk(showId);
+        const targetUser = await User.findByPk(userId);
+        targetUser.addShow(targetShow);
+        const response = await User.findOne({
+            where: { id: userId },
+            include: Show
+        });
+        res.json(response);
+    } catch(error) {
+        next(error);
+    }
+})
+
 module.exports = usersRouter;
