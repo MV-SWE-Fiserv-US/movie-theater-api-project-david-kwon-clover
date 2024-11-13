@@ -5,7 +5,7 @@ const { User, Show } = require("../models");
 usersRouter.get("/", async (req, res, next) => {
     try {
         const allUsers = await User.findAll();
-        res.json(allUsers);
+        res.status(200).json(allUsers);
     } catch(error) {
         next(error);
     }
@@ -14,7 +14,7 @@ usersRouter.get("/", async (req, res, next) => {
 usersRouter.get("/:id", async (req, res, next) => {
     try {
         const targetUser = await User.findByPk(req.params.id);
-        res.json(targetUser);
+        res.status(200).json(targetUser);
     } catch(error) {
         next(error)
     }
@@ -26,7 +26,7 @@ usersRouter.get("/:id/shows", async (req, res, next) => {
             where: { id: req.params.id },
             include: Show
         });
-        res.json(targetUser);
+        res.status(200).json(targetUser);
     } catch(error) {
         next(error)
     }
@@ -39,7 +39,7 @@ usersRouter.put("/:userId/shows/:showId", async (req, res, next) => {
         const targetUser = await User.findByPk(userId);
         await targetUser.addShow(targetShow);
         const updatedUser = await User.findByPk(userId, { include: Show });
-        res.json(updatedUser);
+        res.status(200).json(updatedUser);
     } catch(error) {
         next(error);
     }
