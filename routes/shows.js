@@ -20,4 +20,16 @@ showsRouter.get("/:id", async (req, res, next) => {
     }
 })
 
+showsRouter.get("/:id/users", async (req, res, next) => {
+    try {
+        const targetShow = await Show.findOne({
+            where: { id: req.params.id },
+            include: User
+        })
+        res.status(200).json(targetShow);
+    } catch(error) {
+        next(error);
+    }
+})
+
 module.exports = showsRouter;
