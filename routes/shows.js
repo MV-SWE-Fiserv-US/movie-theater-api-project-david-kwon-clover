@@ -46,4 +46,14 @@ showsRouter.put("/:id/available", async (req, res, next) => {
     }
 })
 
+showsRouter.delete("/:id", async (req, res, next) => {
+    try {
+        const targetShow = await Show.findByPk(req.params.id);
+        await Show.destroy({ where: { id: req.params.id } })
+        res.status(200).json({deleted: targetShow});
+    } catch(error) {
+        next(error);
+    }
+})
+
 module.exports = showsRouter;
