@@ -3,4 +3,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 
+const usersRouter = require("../routes/users");
+
+app.use("/users", usersRouter);
+
 module.exports = app;
