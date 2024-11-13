@@ -32,4 +32,18 @@ showsRouter.get("/:id/users", async (req, res, next) => {
     }
 })
 
+showsRouter.put("/:id/available", async (req, res, next) => {
+    try {
+        const targetShow = await Show.findByPk(req.params.id);
+        const targetAvailability = targetShow.available;
+        await Show.update({
+            available: !targetAvailability
+        }, { where: { id: req.params.id } });
+        const updatedShow = await Show.findByPk(req.params.id);
+        res.status(200).json(updatedShow);
+    } catch {
+        next(error);
+    }
+})
+
 module.exports = showsRouter;
