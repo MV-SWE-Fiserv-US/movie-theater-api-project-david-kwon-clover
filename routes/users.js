@@ -37,12 +37,9 @@ usersRouter.put("/:userId/shows/:showId", async (req, res, next) => {
     try {
         const targetShow = await Show.findByPk(showId);
         const targetUser = await User.findByPk(userId);
-        targetUser.addShow(targetShow);
-        const response = await User.findOne({
-            where: { id: userId },
-            include: Show
-        });
-        res.json(response);
+        await targetUser.addShow(targetShow);
+        const updatedUser = await User.findByPk(userId, { include: Show });
+        res.json(updatedUser);
     } catch(error) {
         next(error);
     }
