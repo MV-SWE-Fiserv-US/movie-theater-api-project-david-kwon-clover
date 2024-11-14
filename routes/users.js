@@ -48,13 +48,26 @@ usersRouter.put("/:userId/shows/:showId", async (req, res, next) => {
 
 usersRouter.post("/", [
     check("username").isEmail().withMessage("username must be a valid email")
-], async (req, res, next) => {
+], async (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         res.status(422).json({error: errors.array()});
     } else {
         const newUser = await User.create(req.body);
         res.status(200).json({created: newUser});
+    }
+})
+
+usersRouter.put("/:id", [
+    check("username").isEmail().withMessage("username must be a valid email")
+], async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        res.status(422).json({error: errors.array()});
+    } else {
+        await User.update(req.body, { where: { id: req.params.id } });
+        const updatedUser = await User.findByPk(req.params.id);
+        res.status(200).json({updated: updatedUser});
     }
 })
 
