@@ -45,4 +45,15 @@ usersRouter.put("/:userId/shows/:showId", async (req, res, next) => {
     }
 })
 
+usersRouter.delete("/:id", async (req, res, next) => {
+    try {
+        const targetUser = await User.findByPk(req.params.id);
+        await User.destroy({ where: { id: req.params.id } });
+        res.status(200).json({deleted: targetUser});
+    } catch(error) {
+        next(error);
+    }
+
+})
+
 module.exports = usersRouter;
