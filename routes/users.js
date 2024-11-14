@@ -33,18 +33,6 @@ usersRouter.get("/:id/shows", async (req, res, next) => {
     }
 })
 
-usersRouter.put("/:userId/shows/:showId", async (req, res, next) => {
-    const { userId, showId } = req.params;
-    try {
-        const targetShow = await Show.findByPk(showId);
-        const targetUser = await User.findByPk(userId);
-        await targetUser.addShow(targetShow);
-        const updatedUser = await User.findByPk(userId, { include: Show });
-        res.status(200).json(updatedUser);
-    } catch(error) {
-        next(error);
-    }
-})
 
 usersRouter.post("/", [
     check("username").isEmail().withMessage("username must be a valid email")
@@ -68,6 +56,19 @@ usersRouter.put("/:id", [
         await User.update(req.body, { where: { id: req.params.id } });
         const updatedUser = await User.findByPk(req.params.id);
         res.status(200).json({updated: updatedUser});
+    }
+})
+
+usersRouter.put("/:userId/shows/:showId", async (req, res, next) => {
+    const { userId, showId } = req.params;
+    try {
+        const targetShow = await Show.findByPk(showId);
+        const targetUser = await User.findByPk(userId);
+        await targetUser.addShow(targetShow);
+        const updatedUser = await User.findByPk(userId, { include: Show });
+        res.status(200).json(updatedUser);
+    } catch(error) {
+        next(error);
     }
 })
 
